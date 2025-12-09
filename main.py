@@ -5,6 +5,14 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 MAX_THREADS = 50
 
+### PREPARE
+if not os.path.exists('./blocklists/'):
+    os.makedirs('./blocklists/')
+
+if os.path.exists('blocklist.txt'):
+    os.remove('blocklist.txt')
+
+
 ### DOWNLOAD
 with open('lists.txt', 'r') as f:
     urls = [u.strip() for u in f.readlines() if u.strip()]
@@ -34,9 +42,22 @@ for filename in os.listdir(blocklist_dir):
 ## COMBINE
 arrVer = sorted(set(all_domains))
 
-with open('combined_domains.txt', 'w', encoding='utf-8') as f:
+with open('blocklist.txt', 'w', encoding='utf-8') as f:
     f.write("# Combined Blocklist\n# Created by Blocklist Sync Script\n"
             "# Developed by benjjvi\n# github.com/benjjvi/\n\n\n")
     f.write("\n".join(arrVer))
 
-print(f"Saved {len(arrVer)} unique domains to combined_domains.txt")
+print(f"Saved {len(arrVer)} unique domains to blocklist.txt")
+
+
+### CLEANUP
+for filename in os.listdir(blocklist_dir):
+    # Delete all files in directory
+    file_path = os.path.join(blocklist_dir, filename)
+    os.remove(file_path)
+print("Cleanup completed.")
+
+
+### STATS
+print(f"Total unique domains: {len(arrVer)}")
+print("Blocklist sync process completed successfully.")
