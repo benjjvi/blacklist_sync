@@ -219,3 +219,4 @@ __marimo__/
 test.py
 blocklists/*.txt
 combined_domains.txt
+.DS_Store
